@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap');
+
+.container{
+    background-color: whitesmoke;
+}
+
+/*navigation menu*/
+nav{
+    background: #ff5353;
+    padding: 20px 10px;
+}
+nav ul{
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0;
+}
+nav li{
+    list-style-type: none;
+    display: inline-block;
+    margin: 0 10px 0 0;
+}
+nav a{
+    color: #fff;
+    font-size: 18px;
+    background: rgba(255,255,255,0.2);
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+}
+
+.login-form{
+    padding: 10%;
+    margin : 10% auto;
+    box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
+
+.login-form .form-group{
+    margin-bottom: 5%;
+}
+
+.login-form .form-group button{
+    display: block;
+    margin: 0 auto;
+    width: 20%;
+}
+
+.login-form .form-group .logo{
+    text-align: center;
+    margin: 5% auto;
+
+}
+
+/*Google button*/
+.google-btn{
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+    background-color: #ff5353;
+    border-radius: 5px;
+    
+}
+.google-btn:hover{
+    color: white;
+    
+}
+
