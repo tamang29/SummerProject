@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #map {
+          height: 400px;
+        }
+        html, body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+        }
+      </style>
+</head>
+<body>
+    <div id="map">
+        
+    </div>
+</body>
+<script>
+
+let map;
+function initMap() {
+    var myLatlng = new google.maps.LatLng(27.7172,85.3240);
+    var mapOptions = {
+    zoom: 13,
+    center: myLatlng
+    }
+    map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+    // Place a draggable marker on the map
+    var marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map,
+        draggable:true,
+        title:"Drag me!"
+    });
+   
+}
+
+
+
+</script>
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBNSL00BnX6WvHnjWVYkrfqCxZ2FBk35o&callback=initMap">
+</script>
+</html>

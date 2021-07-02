@@ -1,8 +1,16 @@
 <nav>
     <ul>
+        
         <li><a href="/">Homepage</a></li>
+        <% if(!user) {%>
         <li><a href="/auth/login">Login</a></li>
+        <li><a href="/auth/register">Register</a></li>
+        <% } else {%>
         <li><a href="/auth/logout">Logout</a></li>
+
+        <% } %> 
+       
+        <li><a href="/chat">Chat</a></li>
        
         
     </ul>

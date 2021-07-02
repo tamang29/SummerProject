@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/header.ejs') %> 
+<body>
+    <div class="container">
+        <%- include('./partials/nav.ejs') %>
+            <h2>Chat</h2>
+            <img src="<%= user.thumbnail%>" alt="Profile Picture"/>
+            <p>This is chat page! Welcome <%= user.id %> </p>
+            <input type="hidden" value='<%= user.id %>' id="userId"/>
+            
+            
+
+
+
+            <!--<div id="mario-chat">
+                
+                <div id="chat-window">
+                    <div id="output"></div>
+                    <div id="feedback"></div>
+                </div>
+                <input id="handle" type="text" placeholder="Handle" value='<%= user.firstname  %> '/>
+                <input id="message" type="text" placeholder="Message" />
+                <button id="send">Send</button>
+            </div>
+    
+            -->
+            
+    </div>
+
+    
+<%- include('./partials/footer.ejs') %> 
+<script src="/js/chat.js"></script>
+</body>
+</html>

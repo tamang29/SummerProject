@@ -1,15 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('./partials/header.ejs') %> 
+
 <body>
     <div class="container">
         <%- include('./partials/nav.ejs') %>
+        <div class="row">
+            <div>
             <h2>Home Page</h2>
-            <p>This is home page</p>
+            <img src="<%= user.thumbnail%>" alt="Profile Picture"/>
+            <p>This is home page! Welcome <%= user.id %> </p>
+            <input type="hidden" value='<%= user.id %>' id="userId"/>
+        </div>
+        </div>
+
+        <div class="row justify-content-end">
+            <div class="search-form col-4">
+                <form action="/search" method="POST">
+                    <input type="search" name="search" id="search" placeholder="Search people and friends" class="form-control"/>
+                </form>
+            </div>
+           
+           
+            
+        </div>
+            
+
             
     </div>
 
-
+    
 <%- include('./partials/footer.ejs') %> 
+
 </body>
 </html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Page</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/styles/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js" integrity="sha512-iZIBSs+gDyTH0ZhUem9eQ1t4DcEn2B9lHxfRMeGQhyNdSUz+rb+5A3ummX6DQTOIs1XK0gOteOg/LPtSo9VJ+w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</head>
+<body>
+    <div class="container">
+        <%- include('./partials/nav.ejs') %>
+        <div class="row">
+            <div>
+            <h2>Home Page</h2>
+            <img src="<%= user.thumbnail%>" alt="Profile Picture"/>
+            <p>This is search page! Welcome <%= user.id %> </p>
+            <input type="hidden" value='<%= user.id %>' id="userId"/>
+        </div>
+        </div>
+
+        <div class="row justify-content-end">
+            <div class="search-form col-4">
+                <form action="/search" method="POST">
+                    <input type="search" name="search" id="search" placeholder="Search people and friends" class="form-control"/>
+                </form>
+            </div>
+           
+        </div>
+        <% let notFound; %> 
+        <% if(result.length>0){ %> 
+            
+        <div class="row p-2" id="search">
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Search Results <%= result.length%></h6>
+            <% result.forEach(function(result){ %>
+                <input type="text" class="userRequestId" id="<%=result.id  %> " value="<%=result.id  %> " hidden>
+            <div class="media text-muted pt-3">
+              <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" 
+              src="<%= result.thumbnail %>"
+              data-holder-rendered="true" style="width: 32px; height: 32px;">
+              <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                <div class="row w-100">
+                    <div class="col">
+                  <strong class="text-gray-dark"><%= result.firstname %><%= result.lastname%> </strong>
+                    </div>
+                    <div class="col d-flex justify-content-end add">
+                            <% if(user.friendList.length == 0){ %>
+                                <button class="btn btn-primary mx-2 addfriend" id="addfriend" data-state="notsend" data-id="<%= result.id %> ">Add Friend </button>
+                        <button type="button" class="btn btn-outline-danger cancel" id="<%= result.id %>" hidden>Cancel</button>
+                                <% } %> 
+                        <% for(let friend = user.friendList , i = 0 ; i < friend.length ; i++){ %> 
+                    
+                        <% if(friend[i]._id == result.id) { notFound = false %>
+                            <% if(friend[i].status == "pending"){ %> 
+                                <% if(friend[i].sentByMe == true) { %> 
+                                    <button class="btn btn-primary mx-2 addfriend "  data-state="sent" disabled>
+                                        Request Sent
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger cancel" data-cancel="<%= result.id %>" >Cancel</button>
+                                        
+                                <% } else{ %> 
+                                    <button class="btn btn-primary mx-2 confirm-request" data-confirm="<%= result.id  %> ">Confirm</button>
+                                    <button class="btn btn-primary mx-2 unfriend" data-id="<%= result.id %> " hidden>UnFriend </button>
+                                    
+                                <% }  %>
+                                <%} else{ %> 
+                                    <button class="btn btn-primary mx-2 unfriend" data-id="<%= result.id %> " >UnFriend </button>
+                                   
+                                    <% } %> 
+
+                                    
+                            <% break } else{ notFound = true}%>
+                                    
+                                    
+
+                            <% }%>
+                           
+                            <% if(notFound) {%> 
+                                <button class="btn btn-primary mx-2 addfriend" id="addfriend" data-state="notsend" data-id="<%= result.id %> ">Add Friend </button>
+                        <button type="button" class="btn btn-outline-danger cancel" data-cancel="<%= result.id %>" hidden>Cancel</button>
+                                <% } %> 
+                            
+                            
+                        
+                    </div>
+                </div>
+                <span class="d-block" id="#receiverEmail"><%= result.email %></span>
+              </div>
+            </div>
+            
+       
+        
+        <% }) %> 
+        <% }else{ %> 
+            <div class="row p-2">
+                <div class="my-3 p-3 bg-white rounded box-shadow">
+                    <h6 class="border-bottom border-gray pb-2 mb-0">Search Results</h6>
+                        <div class="no-result">
+                            0 result found
+                        </div>
+                        </div>
+        <% } %> 
+    </div>
+    </div>
+</div>
+
+    
+<%- include('./partials/footer.ejs') %> 
+<script>
+    $(document).ready(function(){
+        
+        //send friend request
+        $(this).on('click','#addfriend', function(e){
+            e.preventDefault();
+          
+            let clickedBtn = $(this);
+            //change button state to request sent
+            $(this).attr('data-state','sent');
+
+            //logged in user
+            const userId = $("#userId").val();
+            //sending request to user
+            const userRequestId = $(this).data('id');
+
+            //console.log("receiving user" ,userRequestId);
+            
+            $.ajax({
+                url: '/friend/sendrequest',
+                method : 'GET',
+                data: {to: userRequestId, from: userId },
+
+                success:function(data){
+                    if(data.statusCode == 200){
+                        
+                        clickedBtn.attr('disabled',true).html('Request Sent');
+                        clickedBtn.closest('.add').find('.cancel').attr('hidden', false);
+                        console.log('success');
+                    }
+    
+                },
+                error: function(err){
+                    alert(err);
+                }
+            })
+
+
+          
+            
+        } )
+
+        //cancel friend request
+        $(this).on('click', ' .cancel' , function(){
+
+            let clickedBtn = $(this);
+            const cancelid = $(this).data('cancel');
+
+           
+            $.ajax({
+                url: '/friend/deleterequest',
+                method: 'GET',
+                data: {cancelid : cancelid},
+
+                success:function(data){
+                    if(data.statusCode == 200){
+                        clickedBtn.attr('hidden', true);
+                        clickedBtn.closest('.add').find('.addfriend').attr('disabled', false).html('Add friend');
+                    }
+                    if(data.statusCode == 500){
+                        alert('something went wrong please try again');
+                    }
+                }
+            })
+        })
+
+        //confirm friend request
+        $(this).on('click', ' .confirm-request', function(){
+            let clickedBtn = $(this);
+            const confirmid = $(this).data('confirm').toString();
+            alert(confirmid);
+            $.ajax({
+                url: '/friend/confirmrequest',
+                method: 'GET',
+                data: {id : confirmid},
+
+                success:function(data){
+                    if(data.statusCode == 200){
+
+                        clickedBtn.attr('hidden', true);
+                        clickedBtn.closest('.add').find('.unfriend').attr('hidden', false).html('UnFriend');
+                    }
+                    if(data.statusCode == 500){
+                        alert('something went wrong please try again');
+                    }
+                }
+            })
+        })
+    })
+</script>
+    
+</body>
+</html>
+
+    
+        
