@@ -64,11 +64,11 @@
                                         
                                 <% } else{ %> 
                                     <button class="btn btn-primary mx-2 confirm-request" data-confirm="<%= result.id  %> ">Confirm</button>
-                                    <button class="btn btn-primary mx-2 unfriend" data-id="<%= result.id %> " hidden>UnFriend </button>
+                                    <button class="btn btn-primary mx-2 unfriend" data-unfriend="<%= result.id %> " hidden>UnFriend </button>
                                     
                                 <% }  %>
                                 <%} else{ %> 
-                                    <button class="btn btn-primary mx-2 unfriend" data-id="<%= result.id %> " >UnFriend </button>
+                                    <button class="btn btn-primary mx-2 unfriend" data-unfriend="<%= result.id %> " >UnFriend </button>
                                    
                                     <% } %> 
 
@@ -166,8 +166,9 @@
 
                 success:function(data){
                     if(data.statusCode == 200){
-                        clickedBtn.attr('hidden', true);
+                        //clickedBtn.attr('hidden', true);
                         clickedBtn.closest('.add').find('.addfriend').attr('disabled', false).html('Add friend');
+                        clickedBtn.remove();
                     }
                     if(data.statusCode == 500){
                         alert('something went wrong please try again');
@@ -189,11 +190,44 @@
                 success:function(data){
                     if(data.statusCode == 200){
 
-                        clickedBtn.attr('hidden', true);
+                        //clickedBtn.attr('hidden', true);
                         clickedBtn.closest('.add').find('.unfriend').attr('hidden', false).html('UnFriend');
+                        
+                        clickedBtn.remove();
                     }
                     if(data.statusCode == 500){
-                        alert('something went wrong please try again');
+                        alert('something went wrong. Please try again');
+                    }
+                }
+            })
+        })
+
+
+        $(this).on('click', ' .unfriend', function(){
+            
+            let clickedBtn = $(this);
+            const unfriendid = $(this).data('unfriend');
+            alert(unfriendid);
+            $.ajax({
+                url : '/friend/unfriend',
+                method : 'GET',
+                data : {unfriendid : unfriendid},
+
+                success:function(data){
+                    if(data.statusCode == 200){
+                       clickedBtn.attr('hidden', true);
+                       let r = $('<input/>').attr({
+                         type: "button",
+                         class: "btn btn-primary mx-2 addfriend",
+                         value: "Add Friend",
+                         
+                        });
+                        clickedBtn.closest('.add').append(r);
+                        clickedBtn.remove();
+
+                    }
+                    if(data.statusCode == 500){
+                        alert('something went wrong. Please try again');
                     }
                 }
             })

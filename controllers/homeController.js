@@ -76,7 +76,7 @@ const sendRequest = (req, res ,next) =>{
 
    }
 
-   const deleteRequest = (req, res ,next) =>{
+const deleteRequest = (req, res ,next) =>{
        //user that you sent friend request to
         const cancelid = req.query.cancelid;
         const cancelid_obj = mongoose.Types.ObjectId(cancelid.trim());
@@ -97,7 +97,7 @@ const sendRequest = (req, res ,next) =>{
                         {
                             $pull:{
                                 friendList: {_id: userId},
-                                notification: {userId: req.user.id}
+                                notification: {_id: req.user.id}
                             }
                         },
                         function(err , user){
@@ -115,7 +115,7 @@ const sendRequest = (req, res ,next) =>{
         
    }
 
-   const confirmRequest = (req, res ,next) =>{
+const confirmRequest = (req, res ,next) =>{
     
         const confirmid = req.query.id;
         const useri = mongoose.Types.ObjectId(req.user.id.trim());
@@ -149,16 +149,68 @@ const sendRequest = (req, res ,next) =>{
                     }
                 },function(err, user){
                     if(err) {res.send(err);}
-                    else{res.send({statusCode: 200});}
-                }
-                )
+                    else{
+                        User.updateOne({_id : useri},
+                            {
+                           $pull : {notification : {_id:confirmid_obj} }
+                            },function(err, user){
+                                if(err) throw err;
+                                else {
+                                    User.updateOne({_id : confirmid_obj},
+                                        {
+                                            $push : {
+                                                notification : {
+                                                    "_id": useri,
+                                                    "type": "friend request",
+                                                    "content":req.user.username + "accepted your friend request",
+                                                    "profileImage": req.user.thumbnail,
+                                                    "createdAt": new Date().getTime(),
+                                                }
+                                            }
+                                        },
+                                        function(err ,user){
+                                            if(err) throw err;
+                                            else{ res.send({statusCode:200})}
+                                        }
+                                        )
+                                    }
+                            })
+                    }
+                })
+            }
+        })
+   }
+
+const unfriendRequest = (req, res, next)=> {
+    const friendId = mongoose.Types.ObjectId(req.query.unfriendid.trim());
+    const userId = mongoose.Types.ObjectId(req.user.id.trim());
+    User.update({_id: userId},
+        {
+            $pull : {
+                friendList: {_id : friendId}
             }
         }
-
         )
+        .then((user)=>{
+            User.update({_id: friendId},
+                {
+                    $pull: {
+                        friendList : {_id : userId }
+                    }
+                }
+                ).then((user)=>{
+                    res.send({statusCode: 200});
+                })
+                .catch((err)=>{
+                    if(err) throw err;
+                })
             
-       
-   }
+        })
+        .catch((err)=>{
+            if(err) throw err;
+        })
+
+}
 
 
 
@@ -168,5 +220,6 @@ module.exports= {
     sendRequest,
     searchPeople,
     deleteRequest,
-    confirmRequest
+    confirmRequest,
+    unfriendRequest
 }

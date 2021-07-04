@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const authRoute = require('./routes/auth-route');
 const homeRoute = require('./routes/home-route');
-
+const chatRoute = require('./routes/chat-route');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const passportSetup = require('./config/passport-setup');
@@ -82,6 +82,7 @@ app.use('/', homeRoute);
 //setup routes
 
 app.use('/auth', authRoute);
+app.use('/chat', chatRoute);
 app.get('/login',(req, res) => {
     res.redirect('/auth/login');
 })
@@ -92,9 +93,7 @@ app.get('/maps', (req,res)=>{
     res.render('maps');
 })
 
-app.get('/chat', (req,res)=>{
-    res.render('chat', {title: 'Chat', user:req.user});
-})
+
 
 
 
@@ -108,19 +107,19 @@ const io = socket(httpServer);
 
 
 
-io.on('connection', (socket)=>{
-    console.log('made connection to socket', socket.id);
+// io.on('connection', (socket)=>{
+//     console.log('made connection to socket', socket.id);
     
 
-    socket.on('chat', (data)=>{
-        io.sockets.emit('chat',data);
-    })
+//     socket.on('chat', (data)=>{
+//         io.sockets.emit('chat',data);
+//     })
 
-    socket.on('typing', (data)=>{
-        socket.broadcast.emit('typing',data);
-    })
+//     socket.on('typing', (data)=>{
+//         socket.broadcast.emit('typing',data);
+//     })
 
-})
+// })
 
 httpServer.listen(3000, function() {
     console.log('localhost started on 3000')

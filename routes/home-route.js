@@ -1,6 +1,5 @@
 
 const router = require('express').Router();
-const User= require('../models/User');
 const homeController = require('../controllers/homeController');
 
 const authCheck = (req, res , next) => {
@@ -26,6 +25,7 @@ router.get('/home',authCheck, (req,res) => {
 router.get('/friend/sendrequest', homeController.sendRequest);
 router.get('/friend/deleterequest', homeController.deleteRequest);
 router.get('/friend/confirmrequest', homeController.confirmRequest);
+router.get('/friend/unfriend', homeController.unfriendRequest);
 
 router.post('/search',authCheck, homeController.searchPeople);
 

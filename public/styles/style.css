@@ -105,27 +105,59 @@ nav a{
     
 }
 
-/*chat window
-#mario-chat{
-    max-width: 600px;
-    margin: 30px auto;
+
+#mario-chat{   
     border: 1px solid #ddd;
     box-shadow: 1px 3px 5px rgba(0,0,0,0.05);
     border-radius: 2px;
+    overflow-y: scroll;
+    overflow: hidden;
 }
 
 #chat-window{
     height: 400px;
     overflow: auto;
     background: #f9f9f9;
+    
 }
 
-#output p{
+/* #output p{
     padding: 14px 0px;
     margin: 0 20px;
     border-bottom: 1px solid #e9e9e9;
     color: #555;
+} */
+
+#output #me p{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    
+    
 }
+#output #me p span{
+    background-color: rgba(0, 174, 255, 0.945);
+    color: white;
+    padding: 10px 10px;
+    border-radius: 3px;
+    
+}
+#output #you p{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    
+    
+}
+#output #you p span{
+    background-color: rgba(0, 228, 49, 0.945);
+    color: white;
+    padding: 10px 10px;
+    border-radius: 3px;
+    
+}
+
+
 
 #feedback p{
     color: #aaa;
@@ -133,17 +165,14 @@ nav a{
     margin: 0 20px;
 }
 
-#output strong{
-    color: #575ed8;
-}
 
-label{
+#mario-chat label{
     box-sizing: border-box;
     display: block;
     padding: 10px 20px;
 }
 
-input{
+#mario-chat input{
     padding: 10px 20px;
     box-sizing: border-box;
     background: #eee;
@@ -156,7 +185,7 @@ input{
     font-size: 16px;
 }
 
-button{
+#mario-chat button{
     background: #575ed8;
     color: #fff;
     font-size: 18px;
@@ -166,4 +195,3 @@ button{
     border-radius: 0 0 2px 2px;
 }
 
-*/

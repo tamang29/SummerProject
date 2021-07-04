@@ -6,30 +6,62 @@
         <%- include('./partials/nav.ejs') %>
             <h2>Chat</h2>
             <img src="<%= user.thumbnail%>" alt="Profile Picture"/>
-            <p>This is chat page! Welcome <%= user.id %> </p>
-            <input type="hidden" value='<%= user.id %>' id="userId"/>
-            
-            
-
-
-
-            <!--<div id="mario-chat">
-                
-                <div id="chat-window">
-                    <div id="output"></div>
-                    <div id="feedback"></div>
+            <p>This is chat page! Welcome <%= user._id %> </p>
+            <input type="hidden" value='<%= user._id %>' id="userId"/>
+            <% let selectedUser; %> 
+            <div class="row bg-light">
+                <div class="col-md-3 p-0">
+                    <% if(user.friendList.length > 0 ){ %> 
+                    <% user.friendList.forEach(friend => { %>
+                        <% if(friend.status == "accepted") {%> 
+                    
+                    <div class="d-flex text-muted ">
+                           <a href="/chat/<%= friend.id  %>" class="list-group-item list-group-item-action py-3 lh-tight tab" aria-current="true" data-id="<%= friend._id %> ">
+                            <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" 
+                            src="<%= friend.thumbnail %>"/>
+                            <div class="d-flex w-100 align-items-center justify-content-between">
+                              <strong class="mb-1"><%= friend.username  %> </strong>
+                              <small>Wed</small>
+                            </div>
+                            <div class="col-10 mb-1 small">Last message.</div>
+                          </a>
+                    </div>
+                      <% } %> 
+                    <% }); %> 
+                      <% } %> 
                 </div>
-                <input id="handle" type="text" placeholder="Handle" value='<%= user.firstname  %> '/>
-                <input id="message" type="text" placeholder="Message" />
-                <button id="send">Send</button>
-            </div>
-    
-            -->
-            
+               
+                <div class="col-md-9 p-0">
+                    <%- include('./windowchat.ejs') %> 
+                </div>
+            </div>        
     </div>
-
-    
 <%- include('./partials/footer.ejs') %> 
-<script src="/js/chat.js"></script>
+
+<script>
+    $(document).ready(function(){
+        
+        $(".tab").click(function(e){
+
+            $(".tab").removeClass("active");
+            $(this).addClass("active"); 
+           
+            let selectedUser = $(".active").data('id');
+            console.log(selectedUser);
+
+            $.ajax({
+                url : '/chat/' + selectedUser,
+                method: 'GET',
+                
+                success:function(data){
+                  
+                   console.log("success");
+                }
+            })
+            
+        })
+    })
+</script>
+
 </body>
 </html>

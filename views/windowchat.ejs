@@ -1,0 +1,58 @@
+<div id="mario-chat">
+    <div class="username">
+    
+            <% if(!user){ %> 
+                error
+                <% }%>
+                <% if(typeof selectedUser!='undefined'){%> 
+                    <div>
+                        <%= selectedUser.username %>
+                        <input type="text" data-userid="<%= selectedUser._id  %>" id="selecteduser" hidden>
+                    </div>
+                <% }%> 
+    </div>
+    <div id="chat-window">
+        <div id="output">
+            <ul class="list-unstyled whole">
+                <% if(typeof selectedUser!='undefined'){ %> 
+                <% if(selectedUser.friendList.length > 0){ %> 
+                    <% selectedUser.friendList.forEach(friend => { %>
+                        <% if(friend.inbox.length > 0){ %> 
+                            <% friend.inbox.forEach(msg => { %>    
+                               
+                                
+                                <li id="me">
+                                    <% if(msg.from == user.id) {%> 
+                                    <p class="m-1"><span><strong> <%= msg.message  %> </strong></span></p>
+                                    <% } %> 
+                                </li>
+                                
+                                
+                                <li id="you">
+                                    <% if(msg.from == selectedUser.id) {%> 
+                                    <p class="m-1"><span><strong> <%= msg.message  %> </strong></span></p> 
+                                    <% } %> 
+                                </li>
+                                
+                               
+                                
+                        <%}); %> 
+                        <% } %> 
+                    <%}); %> 
+                    <% } %> 
+                    <% } %> 
+            </ul>
+        </div>
+        <div id="feedback"></div>
+    </div>
+   
+
+    <input id="message" type="text" placeholder="Message" />
+    <% if(typeof selectedUser == 'undefined'){ %> 
+    <button id="send" disabled>Send</button>
+        <% }else { %> 
+            <button id="send" >Send</button>
+        <% } %> 
+</div> 
+<%- include('./partials/footer.ejs') %> 
+<script src="/js/chat.js"></script>
