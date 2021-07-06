@@ -31,6 +31,12 @@
 
     
 <%- include('./partials/footer.ejs') %> 
-
+<script>
+     const socket = io();
+        const userid = $('#userId').val();
+        socket.on('connect',(data)=>{
+            socket.emit('storeClientInfo', userid);
+        });
+</script>
 </body>
 </html>

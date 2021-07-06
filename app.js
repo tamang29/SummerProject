@@ -104,22 +104,47 @@ const httpServer = http.createServer(app);
 
 //const httpsServer = https.createServer(options , app);
 const io = socket(httpServer);
+let clients = [];
 
 
+io.on('connection', (socket)=>{
+   
+    socket.on('storeClientInfo', (data)=>{
+        let clientInfo = new Object();
+        clientInfo.customId = data;
+        clientInfo.clientId = socket.id;
+        clients.push(clientInfo);
+        console.log("connected socket:" +socket.id);
+        // console.log(clients);
 
-// io.on('connection', (socket)=>{
-//     console.log('made connection to socket', socket.id);
-    
+    })
 
-//     socket.on('chat', (data)=>{
-//         io.sockets.emit('chat',data);
-//     })
+    socket.on('disconnect', function (data) {
 
-//     socket.on('typing', (data)=>{
-//         socket.broadcast.emit('typing',data);
-//     })
+        for( var i=0, len=clients.length; i<len; ++i ){
+            var c = clients[i];
 
-// })
+            if(c.clientId == socket.id){
+                clients.splice(i,1);
+                break;
+            }
+        }
+
+    });
+
+    socket.on("private message", (data)=>{
+      io.emit('private message', data);
+    })
+
+    socket.on('chat', (data)=>{
+        io.sockets.emit('chat',data);
+    })
+
+    socket.on('typing', (data)=>{
+        socket.broadcast.emit('typing',data);
+    })
+
+})
 
 httpServer.listen(3000, function() {
     console.log('localhost started on 3000')

@@ -115,7 +115,8 @@ nav a{
 }
 
 #chat-window{
-    height: 400px;
+    height: 600px;
+    max-height: 700px;
     overflow: auto;
     background: #f9f9f9;
     

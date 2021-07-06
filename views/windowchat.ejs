@@ -3,7 +3,9 @@
     
             <% if(!user){ %> 
                 error
-                <% }%>
+                <% }else{%>
+                    <input type="text" id="userId" value="<%= user.id%>" hidden>
+                    <%} %> 
                 <% if(typeof selectedUser!='undefined'){%> 
                     <div>
                         <%= selectedUser.username %>
@@ -15,8 +17,9 @@
         <div id="output">
             <ul class="list-unstyled whole">
                 <% if(typeof selectedUser!='undefined'){ %> 
-                <% if(selectedUser.friendList.length > 0){ %> 
-                    <% selectedUser.friendList.forEach(friend => { %>
+                <% if(user.friendList.length > 0){ %> 
+                    <% user.friendList.forEach(friend => { %>
+                        <% if(friend.id == selectedUser.id) {%> 
                         <% if(friend.inbox.length > 0){ %> 
                             <% friend.inbox.forEach(msg => { %>    
                                
@@ -38,7 +41,7 @@
                                 
                         <%}); %> 
                         <% } %> 
-                    <%}); %> 
+                    <%}}); %> 
                     <% } %> 
                     <% } %> 
             </ul>
@@ -47,7 +50,7 @@
     </div>
    
 
-    <input id="message" type="text" placeholder="Message" />
+    <input id="message" type="text" placeholder="Message" autocomplete="off"/>
     <% if(typeof selectedUser == 'undefined'){ %> 
     <button id="send" disabled>Send</button>
         <% }else { %> 

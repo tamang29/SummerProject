@@ -9,7 +9,7 @@
             <p>This is chat page! Welcome <%= user._id %> </p>
             <input type="hidden" value='<%= user._id %>' id="userId"/>
             <% let selectedUser; %> 
-            <div class="row bg-light">
+            <div class="row bg-light h-100">
                 <div class="col-md-3 p-0">
                     <% if(user.friendList.length > 0 ){ %> 
                     <% user.friendList.forEach(friend => { %>
@@ -40,7 +40,7 @@
 
 <script>
     $(document).ready(function(){
-        
+       
         $(".tab").click(function(e){
 
             $(".tab").removeClass("active");
