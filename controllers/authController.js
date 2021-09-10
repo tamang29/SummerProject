@@ -5,10 +5,10 @@ const bcrypt = require('bcrypt');
 
 const registerUser = (req, res) => {
 
-   const  {firstname, lastname , email, password, confirmpassword} = req.body;
+   const  {firstname, lastname, username , email, password, confirmpassword , accounttype} = req.body;
    let errors = [];
 
-   if(!firstname || !lastname || !email || !password || !confirmpassword){
+   if(!firstname || !lastname ||!username || !email || !password || !confirmpassword ||!accounttype){
       errors.push({msg: 'Please fill all the fields'});
    }
    if(password != confirmpassword){
@@ -27,6 +27,22 @@ const registerUser = (req, res) => {
    }
    else{
       //verification passed
+
+      User.findOne({username: username})
+            .then((user)=>{
+               if(user){
+                  errors.push({msg: 'Username is already registered'});
+                  res.render('register', {
+                     errors,
+                     firstname,
+                     lastname,
+                     username,
+                     email,
+                     title: 'Register',
+                     user: req.user
+                  })
+               }
+            })
       User.findOne({email: email})
          .then((user)=>{
             if(user){
@@ -36,6 +52,7 @@ const registerUser = (req, res) => {
                   errors,
                   firstname,
                   lastname,
+                  username,
                   email,
                   title: 'Register',
                   user: req.user
@@ -46,8 +63,11 @@ const registerUser = (req, res) => {
                const newUser = new User({
                   firstname: firstname,
                   lastname : lastname,
+                  username : username,
                   email : email,
-                  password: password
+                  password: password,
+                  accountType: accounttype,
+                  accountApprove: false
                })
 
                bcrypt.genSalt(10,(err, salt)=>

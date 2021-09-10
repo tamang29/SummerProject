@@ -4,10 +4,11 @@ const mongoose = require('mongoose');
 const searchPeople = (req ,res, next)=>{
     const name = req.body.search;
     
-    User.find({$or: [{username:name.toLowerCase()} , {email : name} ]})
+    User.find({$or: [{username:name.toLowerCase()} , {email : name}]})
         .then((user)=>{
             
             res.render('search-result', {result: user , user: req.user});
+            
         })
         .catch((err)=>{
             res.send(err);

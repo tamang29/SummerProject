@@ -29,19 +29,27 @@ passport.use(
         if (!user) {
           return done(null, false , {message: 'Email is not registered.'});
         }
-        
-       
-        //Match Password
-        bcrypt.compare(password, user.password, (err, isMatch)=>{
-            if(err) throw err;
-
-            if(isMatch){
-                done(null, user);
+        if(user){
+            if(user.accountType == "instructor" && user.accountApprove == false){
+                return done(null, false , {message: 'Instructor is not approved by Admin.'});
             }
             else{
-                done(null , false, {message: 'Incorrect password'});
+                //Match Password
+                bcrypt.compare(password, user.password, (err, isMatch)=>{
+                    if(err) throw err;
+
+                    if(isMatch){
+                        done(null, user);
+                    }
+                    else{
+                        done(null , false, {message: 'Incorrect password'});
+                    }
+                })
             }
-        })
+        }
+        
+       
+       
 
            
         

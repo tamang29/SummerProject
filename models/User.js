@@ -10,6 +10,8 @@ const userSchema = new Schema({
     password: String,
     googleId : String,
     facebookId: String,
+    accountType: String,
+    accountApprove: Boolean,
     friendList: [
         {
             

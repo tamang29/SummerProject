@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/header.ejs') %> 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #video-grid{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 50%);
+            grid-template-rows: 50%;
+        }
+
+        video{
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+        .call-options{
+            position: fixed;
+            
+        }
+    </style>
+
+    <script>
+        const ROOM_ID = "<%= roomId %>";
+        const USER_ID = "<%= user.id%>";
+        const USER_NAME = "<%= user.username%>"
+    </script>
+    
+    
+</head>
+<body>
+    <div id="video-grid">
+
+    </div>
+    <div class="call-options fixed-bottom my-5">
+        <div class="leave-meeting">
+            <button class="btn btn-danger" name="leavemeeting" id="leavemeeting">Leave Meeting</button>
+        </div>
+        
+    </div>
+    <%- include('./partials/footer.ejs') %> 
+</body>
+<script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+<script  src="/js/video.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $(this).on('click','#leavemeeting',function(){
+            window.close('','_parent','')
+        })
+    })
+</script>
+
+</html>

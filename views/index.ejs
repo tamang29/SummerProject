@@ -20,10 +20,17 @@
                     <input type="search" name="search" id="search" placeholder="Search people and friends" class="form-control"/>
                 </form>
             </div>
-           
-           
-            
+
         </div>
+        <% if(user.accountType == "instructor"){ %> 
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <button class="btn btn-primary" id="startMeeting">Start Meeting</button>
+            </div>
+           
+
+        </div>
+        <% } %> 
             
 
             
@@ -31,12 +38,15 @@
 
     
 <%- include('./partials/footer.ejs') %> 
-<script>
-     const socket = io();
-        const userid = $('#userId').val();
-        socket.on('connect',(data)=>{
-            socket.emit('storeClientInfo', userid);
-        });
-</script>
+
+
 </body>
+<script>
+    const socket = io();
+       const userid = $('#userId').val();
+       socket.on('connect',(data)=>{
+           socket.emit('storeClientInfo', userid);
+       });
+</script>
+<script src="/js/meeting.js"></script>
 </html>

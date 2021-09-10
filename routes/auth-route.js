@@ -20,7 +20,7 @@ router.get('/register',authCheck, (req, res)=>{
 })
 
 //post register for new user
-router.post('/register', authController.registerUser);
+router.post('/register',authCheck, authController.registerUser);
 
 
 //auth with login

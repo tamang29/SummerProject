@@ -18,12 +18,12 @@
                     <div class="d-flex text-muted ">
                            <a href="/chat/<%= friend.id  %>" class="list-group-item list-group-item-action py-3 lh-tight tab" aria-current="true" data-id="<%= friend._id %> ">
                             <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" 
-                            src="<%= friend.thumbnail %>"/>
+                            src="<%= friend.profileImage %>" style="height: 32px; width:32px" />
                             <div class="d-flex w-100 align-items-center justify-content-between">
                               <strong class="mb-1"><%= friend.username  %> </strong>
                               <small>Wed</small>
                             </div>
-                            <div class="col-10 mb-1 small">Last message.</div>
+                            <div class="col-10 mb-1 small"></div>
                           </a>
                     </div>
                       <% } %> 

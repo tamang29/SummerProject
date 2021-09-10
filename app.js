@@ -3,6 +3,7 @@ const app = express();
 const authRoute = require('./routes/auth-route');
 const homeRoute = require('./routes/home-route');
 const chatRoute = require('./routes/chat-route');
+const roomRoute = require('./routes/room-route');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const passportSetup = require('./config/passport-setup');
@@ -13,6 +14,8 @@ const http = require('http');
 const fs = require('fs');
 const flash = require('connect-flash');
 const session = require('express-session');
+
+
 
 
 
@@ -93,6 +96,8 @@ app.get('/maps', (req,res)=>{
     res.render('maps');
 })
 
+//video chat room routes
+app.use('/room', roomRoute);
 
 
 
@@ -105,7 +110,8 @@ const httpServer = http.createServer(app);
 //const httpsServer = https.createServer(options , app);
 const io = socket(httpServer);
 let clients = [];
-
+// let userId ;
+// let roomId ;
 
 io.on('connection', (socket)=>{
    
@@ -130,7 +136,10 @@ io.on('connection', (socket)=>{
             }
         }
 
+
     });
+
+  
 
     socket.on("private message", (data)=>{
       io.emit('private message', data);
@@ -143,6 +152,26 @@ io.on('connection', (socket)=>{
     socket.on('typing', (data)=>{
         socket.broadcast.emit('typing',data);
     })
+
+    //for video chat room
+
+
+    socket.on('join-room', (roomId, userId , username)=>{
+        socket.join(roomId);
+        socket.broadcast.to(roomId).emit('user-connected', userId , username)
+
+        socket.on('disconnecting', ()=>{
+            socket.broadcast.to(roomId).emit('user-disconnected', userId ,username)
+        })
+    })
+    socket.on('connection-request',(roomId,userId,username)=>{
+    io.to(roomId).emit('new-user-connected',userId,username);
+    })
+
+    // socket.on('userIdReceived', (id , room) => {
+    //     userId = id
+    //     roomId = room
+    //   });
 
 })
 

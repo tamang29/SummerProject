@@ -1,5 +1,5 @@
-<script>
-$(document).ready(function(){
+
+$(function(){
         
     //send friend request
     $(this).on('click','#addfriend', function(e){
@@ -38,10 +38,11 @@ $(document).ready(function(){
 
       
         
-    } )
+    })
 
     //cancel friend request
     $(this).on('click', ' .cancel' , function(){
+        
 
         let clickedBtn = $(this);
         const cancelid = $(this).data('cancel');
@@ -87,4 +88,3 @@ $(document).ready(function(){
         })
     })
 })
-</script>

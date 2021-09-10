@@ -19,7 +19,7 @@ $(function(){
     //     socket.emit('typing', {sender, receiver:userid});
     // })
 
-    //get typing notification
+    // //get typing notification
     // socket.on('typing', (data)=>{
     //     if(data.receiver == sender && userid!= null ){
     //          $("#feedback").html('<p><em>' + data.sender +' is typing ....</em></p>');
@@ -35,7 +35,11 @@ $(function(){
         }
     })
 
-   
+    $("#message").keyup(function(event) {
+        if (event.keyCode === 13) {
+            $("#send").click();
+        }
+    });
     $('#send').on('click', function(){
         
         const message = $('#message').val();
@@ -103,6 +107,6 @@ $(function(){
 //     })
    
 
-//     socket.on('typing',(data)=>{
-//         feedback.innerHTML = '<p><em>' + data +' is typing ....</em></p>';
-//     })
+    // socket.on('typing',(data)=>{
+    //     feedback.innerHTML = '<p><em>' + data +' is typing ....</em></p>';
+    // })
