@@ -4,6 +4,7 @@ const authRoute = require('./routes/auth-route');
 const homeRoute = require('./routes/home-route');
 const chatRoute = require('./routes/chat-route');
 const roomRoute = require('./routes/room-route');
+const detailRoute = require('./routes/detail-route');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const passportSetup = require('./config/passport-setup');
@@ -98,6 +99,7 @@ app.get('/maps', (req,res)=>{
 
 //video chat room routes
 app.use('/room', roomRoute);
+app.use('/detail', detailRoute);
 
 
 
@@ -143,6 +145,14 @@ io.on('connection', (socket)=>{
 
     socket.on("private message", (data)=>{
       io.emit('private message', data);
+    })
+    socket.on('group message', (data)=>{
+        io.emit('group message', data);
+    })
+
+    socket.on("attendance event", (roomId)=>{
+        
+        socket.broadcast.to(roomId).emit('attendance button',roomId)
     })
 
     socket.on('chat', (data)=>{

@@ -7,9 +7,15 @@
                     <input type="text" id="userId" value="<%= user.id%>" hidden>
                     <%} %> 
                 <% if(typeof selectedUser!='undefined'){%> 
-                    <div>
-                        <%= selectedUser.username %>
+                    <div class="p-2" style="border-bottom: 1px solid #ddd;">
+                        <h5 class="text-center"><%= selectedUser.username %></h5>
                         <input type="text" data-userid="<%= selectedUser._id  %>" id="selecteduser" hidden>
+                    </div>
+                <% }%> 
+                <% if(typeof selectedGroup!='undefined'){%> 
+                    <div class="p-2" style="border-bottom: 1px solid #ddd;">
+                        <h5 class="text-center"><%= selectedGroup.name %></h5>
+                        <input type="text" data-userid="<%= selectedGroup._id  %>" id="selectedgroup" hidden>
                     </div>
                 <% }%> 
     </div>
@@ -26,7 +32,11 @@
                                 
                                 <li id="me">
                                     <% if(msg.from == user.id) {%> 
-                                    <p class="m-1"><span><strong> <%= msg.message  %> </strong></span></p>
+                                    <p class="m-1">
+                                        <span>
+                                            <strong> <%= msg.message  %> </strong>
+                                        </span>
+                                    </p>
                                     <% } %> 
                                 </li>
                                 
@@ -44,6 +54,44 @@
                     <%}}); %> 
                     <% } %> 
                     <% } %> 
+
+                    <% if(typeof selectedGroup != 'undefined'){ %> 
+                        <% if(selectedGroup.inbox.length > 0){ %> 
+                         
+                            <% selectedGroup.inbox.forEach(msg=>{%>
+                                
+                                <li id="me">
+                                    <% if(msg.from == user.id){ %> 
+                                        <p class="m-1">
+                                            <span>
+                                                <strong> <%- msg.message  %> </strong>
+                                            </span>
+                                            <h6>
+                                                <small>
+                                             <%= msg.username  %> 
+                                            </small>
+                                            </h6>
+                                        </p>
+                                        <% } %> 
+                                </li>
+                                <li id="you">
+                                    <% if(msg.from != user.id) {%> 
+                                    <p class="m-1">
+                                        <span>
+                                            <strong> <%- msg.message  %> </strong>
+                                        </span>
+                                        <h6>
+                                            <small>
+                                                <%= msg.username  %> 
+                                               </small>
+                                        </h6>
+                                    </p> 
+                                    <% } %> 
+                                </li>
+
+                            <%}) %> 
+                            <% } %> 
+                        <% } %> 
             </ul>
         </div>
         <div id="feedback"></div>
@@ -51,11 +99,13 @@
    
 
     <input id="message" type="text" placeholder="Message" autocomplete="off"/>
-    <% if(typeof selectedUser == 'undefined'){ %> 
+    <!-- <% if(typeof selectedUser == 'undefined'){ %> 
     <button id="send" disabled>Send</button>
         <% }else { %> 
             <button id="send" >Send</button>
-        <% } %> 
+        <% } %>  -->
+        <button class="sendmessage" id="send" >Send</button>
+  
 </div> 
 <%- include('./partials/footer.ejs') %> 
 <script src="/js/chat.js"></script>

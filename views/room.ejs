@@ -10,7 +10,7 @@
         #video-grid{
             display: grid;
             grid-template-columns: repeat(auto-fill, 50%);
-            grid-template-rows: 50%;
+            grid-template-rows: 100%;
         }
 
         video{
@@ -18,9 +18,9 @@
             width: 100%;
             object-fit: cover;
         }
-        .call-options{
-            position: fixed;
-            
+        
+        label {
+            color: white;
         }
     </style>
 
@@ -32,15 +32,38 @@
     
     
 </head>
-<body>
-    <div id="video-grid">
+<body class="bg-dark">
+    <div class="container">
+        <div id="video-grid">
 
-    </div>
-    <div class="call-options fixed-bottom my-5">
-        <div class="leave-meeting">
-            <button class="btn btn-danger" name="leavemeeting" id="leavemeeting">Leave Meeting</button>
         </div>
-        
+        <div class="row fixed-bottom">
+            <div class="col-md-8 offset-2">
+                
+                <div class="call-options text-white d-flex justify-content-end">
+                    <div class="muteoption col">
+                        <input type="checkbox" class="btn-check mute" id="btn-check-outlined mute" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="btn-check-outlined mute">Mute</label>
+                    </div>
+                    <div class="videooption col">
+                        <input type="checkbox" class="btn-check video" id="btn-check-outlined video" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="btn-check-outlined video">Video</label>
+                    </div>
+                    <div class="sharescreen col">
+                        <button class="btn btn-primary" id="sharescreen">sharescreen</button>
+                    </div>
+                    <% if(user.accountType == 'instructor'){ %> 
+                    <div class="attendance col">
+                        <button class="btn btn-primary" id="attendance">Attendance</button>
+                    </div>
+                    <% } %> 
+                    <div class="leave-meeting col d-flex justify-content-end">
+                        <button class="btn btn-danger" name="leavemeeting" id="leavemeeting">Leave Meeting</button>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
     </div>
     <%- include('./partials/footer.ejs') %> 
 </body>
@@ -52,7 +75,9 @@
         $(this).on('click','#leavemeeting',function(){
             window.close('','_parent','')
         })
+
     })
+
 </script>
 
 </html>

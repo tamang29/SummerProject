@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/header.ejs') %> 
+<body>
+    <div class="container">
+        <%- include('./partials/nav.ejs') %>
+        <input type="hidden" value='<%= user.id %>' id="userId"/>
+        <div class="row">
+        <%- include('./partials/sidebar.ejs') %>
+        
+        <div class="col-md-11">
+            <div class="my-3 p-3 bg-light">
+                <h6 class="border-bottom pb-2 mb-0">Instructor List <span class="badge rounded-pill bg-danger"><%= allusers.length %></h6>
+                
+                    <% if(allusers.length > 0) {%>  
+                        <% allusers.forEach(user=>{%>
+                <div class="media text-muted pt-3">
+                  <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" src="<%= user.thumbnail  %> " data-holder-rendered="true" style="width: 32px; height: 32px;">
+                  <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                    <div class="row w-100">
+                        <div class="col">
+                      <strong class="text-gray-dark"><%= user.firstname  %> <%= user.lastname  %>  </strong>
+                        </div>
+                        <div class="col d-flex justify-content-end add">
+                            <% if(user.accountApprove == false){ %> 
+                            <button class="btn btn-primary mx-2 approve" id="approve" data-state="notsend" data-id="<%= user.id %>">Approve </button>
+                            <button type="button" class="btn btn-outline-danger cancelapproval" data-cancel="<%= user.id%>">Cancel</button>
+                                     
+                                <% } %> 
+                        </div>
+                    </div>
+                    <span class="d-block"><%= user.email  %> </span>
+                  </div>
+                </div>
+                <%  }) %> 
+                <% } %> 
+            </div>
+            <!-- <div class="my-3 p-3 rounded shadow-sm bg-light">
+                <h6 class="border-bottom pb-2 mb-0">Instructor List <span class="badge rounded-pill bg-danger"><%= allusers.length %></h6>
+                
+
+              
+                  <% if(allusers.length > 0) {%>  
+                   <% allusers.forEach(user=>{%>
+                    
+                   
+                        <div class="d-flex text-muted pt-3">
+                        <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>placeholder</title><rect width="100%" height="100%" fill="#6f42c1"></rect><text x="50%" y="50%" fill="#6f42c1" dy=".3em">32x32</text></svg>
+                    
+                        <p class="pb-3 mb-0 small lh-sm">
+                            <strong class="d-block text-gray-dark"><%= user.firstname %> <%=user.lastname  %> </strong>
+                            <strong class="d-block text-gray-dark">@<%= user.username  %> </strong>
+                           
+                        </p>
+                        </div>
+               
+                <%  }) %> 
+                <% } %> 
+                -->
+              
+        </div>
+        </div> 
+        </div>
+
+    </div>
+    <%- include('./partials/footer.ejs') %>     
+</body>
+
+<script>
+    $(document).ready(function(){
+
+        $(this).on('click','#approve', function(e){
+            const instructorid = $(this).data('id');
+            let clickedBtn = $(this);
+            $.ajax({
+                url : '/detail/instructors/approve',
+                method : 'GET',
+                data: {instructor : instructorid},
+
+                success:function(data){
+                  
+                    clickedBtn.attr('disabled',true).html('Approved');
+                    clickedBtn.closest('.add').find('.cancelapproval').attr('hidden', true);
+                }
+
+            })
+        });
+
+        $(this).on('click', '.cancelapproval', function(e){
+            const instructorid = $(this).data('cancel');
+            let clickedBtn = $(this);
+
+            $.ajax({
+                url : '/detail/instructors/cancelapproval',
+                method : 'GET',
+                data : {instructor : instructorid},
+
+                success:function(data){
+                    clickedBtn.attr('disabled', true).html('Canceled');
+                    clickedBtn.closest('.add').find('.approve').attr('hidden', true);
+                }
+            })
+        })
+    })
+</script>
+</html>

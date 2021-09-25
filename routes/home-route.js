@@ -28,6 +28,7 @@ router.get('/friend/confirmrequest', homeController.confirmRequest);
 router.get('/friend/unfriend', homeController.unfriendRequest);
 
 router.post('/search',authCheck, homeController.searchPeople);
+router.get('/search/:id',authCheck, homeController.searchPeopleById);
 
 
 

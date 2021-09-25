@@ -32,6 +32,13 @@ const userSchema = new Schema({
             
         },
     ],
+    groups: [
+        {
+            "name": {type: String},
+            "members":{type:Array},
+            "inbox": {type:Array}
+        }
+    ],
     thumbnail : String
 },{ timestamps : true});
 

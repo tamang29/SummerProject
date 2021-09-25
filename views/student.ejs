@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/header.ejs') %> 
+<body>
+    <div class="container">
+        <%- include('./partials/nav.ejs') %>
+        <input type="hidden" value='<%= user.id %>' id="userId"/>
+        <div class="row">
+        <%- include('./partials/sidebar.ejs') %>
+        <div class="col-md-11">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">List</button>
+                </li>
+               
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Attendance</button>
+                </li>
+              </ul>
+             
+              <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="d-flex justify-content-end my-2">
+                        <% if(user.accountType == 'admin'){ %> 
+                        <button class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#exampleModal">Create Group</button>
+                        <% } %> 
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Create Group</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  
+                                    <div class="form-group">
+                                        <label for="groupname">Group Name:</label>
+                                        <input class="form-control" type="text" name="groupname" id="groupname" value="<%= typeof groupname!= 'undefined'? groupname:''%>" required />
+                                    </div>
+                                    <div class="form-group">
+                                       <% if(allusers){ %> 
+                                        <% allusers.forEach(user=>{ %> 
+                                            <div class="media text-muted pt-3">
+                                                <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" src="<%= user.thumbnail  %> " data-holder-rendered="true" style="width: 32px; height: 32px;">
+                                                <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                                                    <div class="row w-100">
+                                                        <div class="col">
+                                                    <strong class="text-gray-dark"><%= user.firstname  %> <%= user.lastname  %>  </strong>
+                                                        </div>
+                                                        <div class="col d-flex justify-content-end addToGroup">
+                                                          
+                                                            <button type="button" class="btn btn-primary mx-2 adduser" id="adduser" data-id="<%= user.id %>">Add</button>
+                                                                     
+                                                              
+                                                        </div>
+                                                    
+                                                    </div>
+                                                    <span class="d-block"><%= user.email  %> </span>
+                                                </div>
+                                                </div>
+                                            <% }) %> 
+                                        <% } %> 
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary save">Save changes</button>
+                                      </div>
+
+                                  
+                                </div>
+                                
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                    
+                    <div class="my-3 p-3 bg-light">
+                        <% let total=0; %> 
+                       <% allusers.forEach(user=>{ %>
+                           <% if(user.accountType != 'instructor' && user.accountType != 'admin'){ %> 
+                               <% total = total + 1 %> 
+                               <% } %> 
+                       <%}) %> 
+                       <h6 class="border-bottom pb-2 mb-0">Students List <span class="badge rounded-pill bg-danger"><%= total %> </h6>
+                       
+                           <% if(allusers.length > 0) {%>  
+                               <% allusers.forEach(user=>{%>
+                                   <% if(user.accountType != 'instructor' && user.accountType != 'admin'){ %> 
+                                       <div class="media text-muted pt-3">
+                                       <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" src="<%= user.thumbnail  %> " data-holder-rendered="true" style="width: 32px; height: 32px;">
+                                       <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                                           <div class="row w-100">
+                                               <div class="col">
+                                           <strong class="text-gray-dark"><%= user.firstname  %> <%= user.lastname  %>  </strong>
+                                               </div>
+                                           
+                                           </div>
+                                           <span class="d-block"><%= user.email  %> </span>
+                                       </div>
+                                       </div>
+                       <% } %> 
+                       <%  }) %> 
+                       <% } %> 
+                   </div>
+                </div>
+                
+                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">Contact</div>
+              </div>
+            
+           
+              
+              </div>
+        </div> 
+        </div>
+
+    </div>
+    <%- include('./partials/footer.ejs') %>     
+</body>
+<script>
+    $(document).ready(function(){
+        var users = [];
+        if(users.length == 0){
+            $('.save').attr('disabled',true);
+        }
+        $(this).on('click', '.adduser', function(e){
+            const userid = $(this).data('id');
+
+            $(this).attr('disabled',true).html('Added');
+            $('.save').attr('disabled',false);
+            users.push(userid);
+           console.log(users);
+        })
+
+        $(this).on('click', '.save', function(e){
+           const groupname = $('#groupname').val();
+        
+            $.ajax({
+                url : '/detail/creategroup',
+                type : 'POST',
+                data : {allusers : users, groupname : groupname},
+
+                success: function(data){
+                    if(data!=null){
+                        alert(data.msg)
+                    }
+                    else{
+                        alert('Group created successfully');
+                    }
+                   
+                }
+            })
+        })
+    })
+</script>
+</html>

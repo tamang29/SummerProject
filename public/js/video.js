@@ -24,7 +24,9 @@ myVideo.setAttribute("id","me");
 myVideo.muted = true;
 
 const video = document.createElement('video');
-
+var call;
+var userid;
+var username;
 
 
 
@@ -35,7 +37,42 @@ navigator.mediaDevices.getUserMedia({
     video: true
 }).then(stream =>{
     addVideoStream(myVideo, stream)
+    $(".mute").change(function() {
+        if(this.checked) {
+            stream.getAudioTracks()[0].enabled = false;
+        }
+        else{
+            stream.getAudioTracks()[0].enabled = true;
+        }
+    })
+    $(".video").change(function() {
+        if(this.checked) {
+            stream.getVideoTracks()[0].enabled = false;
+        }
+        else{
+            stream.getVideoTracks()[0].enabled = true;
+        }
+    })
 
+    $("#sharescreen").on('click',function(e){
+       
+        navigator.mediaDevices.getDisplayMedia({video: true})
+        .then(screen=>{
+            screen.getVideoTracks()[0].addEventListener('ended', () => {
+                alert('stop sharing')
+               
+                myVideo.srcObject = stream
+                connectToNewUser(userid,stream,call.metadata.username);
+              });
+
+        
+            myVideo.srcObject = screen
+            connectToNewUser(userid,screen,username);
+
+            
+        });
+        
+    })
     myPeer.on('call', call=>{
         
         call.answer(stream)
@@ -47,9 +84,12 @@ navigator.mediaDevices.getUserMedia({
     
     
     socket.on('new-user-connected',(userId,username) =>{
+        
         if(userId!=myPeer.id){
             console.log("New user: "+username);
-            otherLabel.innerHTML = username
+            otherLabel.innerHTML = username;
+            userid = userId;
+            username = username;
             connectToNewUser(userId,stream,username);
         }
     })
@@ -57,6 +97,16 @@ navigator.mediaDevices.getUserMedia({
     socket.emit('connection-request',roomid,myPeer.id,USER_NAME);
     
 })
+
+//attendance event
+// $('#attendance').on('click', function(e){
+//     socket.emit("attendance event" , ROOM_ID);
+// })
+
+// socket.on("attendance button", (roomId)=>{
+//     alert('attendance')
+//     console.log('attendance')
+// })
 
 socket.on("user-disconnected", (userId , username)=>{
     if(userId != myPeer.id){
@@ -71,12 +121,13 @@ socket.on("user-disconnected", (userId , username)=>{
 
 function connectToNewUser(userId , stream){
     
-    const call =  myPeer.call(userId , stream, { metadata: { userName: USER_NAME } });
-   //console.log(call.metadata.userName)
-    
-    call.on('stream', userVideoStream=>{
-        addVideoStream(video,userVideoStream)
+    call =  myPeer.call(userId , stream, { metadata: { userName: USER_NAME , userid : USER_ID} });
+   
+   
+    call.on('stream', stream=>{
+        addVideoStream(video,stream)
     })
+
 
     call.on('close', ()=>{
         video.remove()
@@ -89,6 +140,8 @@ function addVideoStream(newvideo , stream ,call){
     const obj = call;
     //console.log(obj)
     if(obj){
+        userid = obj.metadata.userid;
+        username = obj.metadata.userName;
         console.log("Connected to:" +obj.metadata.userName)
         otherLabel.innerHTML = obj.metadata.userName
     }
@@ -112,4 +165,14 @@ function addVideoStream(newvideo , stream ,call){
         videoGrid.append(otherDiv)
     }
     
+}
+
+function shareScreen(video,stream){
+    const obj = call;
+     if(obj){
+         
+        console.log("Connected to:" +obj)
+        otherLabel.innerHTML = obj.metadata.userName
+    }
+    addVideoStream(video, stream, obj)
 }

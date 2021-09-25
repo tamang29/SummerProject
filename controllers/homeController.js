@@ -4,7 +4,20 @@ const mongoose = require('mongoose');
 const searchPeople = (req ,res, next)=>{
     const name = req.body.search;
     
-    User.find({$or: [{username:name.toLowerCase()} , {email : name}]})
+    User.find({$or: [{username:name.toLowerCase()} , {email : name} , {firstname: name}, {lastname: name}]})
+        .then((user)=>{
+            
+            res.render('search-result', {result: user , user: req.user});
+            
+        })
+        .catch((err)=>{
+            res.send(err);
+        })
+}
+const searchPeopleById = (req ,res ,next) =>{
+    const name = req.params.id;
+
+    User.find({$or: [{username:name.toLowerCase()} , {email : name} , {firstname: name}, {lastname: name} , {_id: name}]})
         .then((user)=>{
             
             res.render('search-result', {result: user , user: req.user});
@@ -163,7 +176,7 @@ const confirmRequest = (req, res ,next) =>{
                                                 notification : {
                                                     "_id": useri,
                                                     "type": "friend request",
-                                                    "content":req.user.username + "accepted your friend request",
+                                                    "content":req.user.username + " accepted your friend request",
                                                     "profileImage": req.user.thumbnail,
                                                     "createdAt": new Date().getTime(),
                                                 }
@@ -220,6 +233,7 @@ const unfriendRequest = (req, res, next)=> {
 module.exports= {
     sendRequest,
     searchPeople,
+    searchPeopleById,
     deleteRequest,
     confirmRequest,
     unfriendRequest

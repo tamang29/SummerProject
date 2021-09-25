@@ -1,17 +1,65 @@
-<nav>
+<!-- <nav>
     <ul>
         
-        <li><a href="/">Homepage</a></li>
+      
         <% if(!user) {%>
         <li><a href="/auth/login">Login</a></li>
         <li><a href="/auth/register">Register</a></li>
         <% } else {%>
-        <li><a href="/auth/logout">Logout</a></li>
+            <li><a href="/">Homepage</a></li>
+                <li><a href="/chat">Chat</a></li>
+       
+            <% if(user.accountType == "admin"){ %> 
+                <li><a href="/instructors">Instructors</a></li>
+                <li><a href="/students">Students</a></li>
+                <% } %> 
+                <li><a href="/auth/logout">Logout</a></li>
 
         <% } %> 
+        
        
-        <li><a href="/chat">Chat</a></li>
+        
        
         
     </ul>
-</nav>
+</nav> -->
+
+<% if(!user){ %> 
+
+<% }else{ %> 
+
+<nav class="navbar navbar-expand-sm navbar-light sticky-top">
+    <div class="col-3">
+        <a class="navbar-brand" href="/">Chat Application</a>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <ul className="nav flex-column align-items-center">
+                <li><a class="nav-link" href="/">Home</a></li>
+                <li><a class="nav-link" href="/chat">Chat</a></li>
+                <li><a class="nav-link" href="/meeting">Meeting</a></li>
+               <% if(user.accountType == "admin"){ %> 
+                <li><a href="/detail/instructors">Instructors</a></li>
+                <li><a href="/detail/students">Students</a></li>
+                <% } %> 
+            <li><a href="/auth/logout">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-9" id="profile">
+        
+            <div class="search-form col-4 mr-2">
+                <form action="/search" method="POST">
+                    <input type="search" name="search" id="search" placeholder="Search people and friends" class="form-control"/>
+                </form>
+            </div>
+
+       
+            <button class="btn btn-info text-white mx-2">Profile</button>
+    </div>
+    </nav>
+
+    <% } %> 

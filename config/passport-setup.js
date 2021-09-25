@@ -78,7 +78,7 @@ passport.use(
         });
         
             // check if user already exists in our own db
-            User.findOne({googleId: profile.id})
+            User.findOne({ email:profile._json.email})
             .then((currentUser) => {
                     if(currentUser)
                     {

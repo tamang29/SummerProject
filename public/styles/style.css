@@ -1,10 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap');
 
 .container{
-    background-color: whitesmoke;
+    background-color:none;
+    padding: 0;
 }
 
 /*navigation menu*/
+/*
 nav{
     background: #ff5353;
     padding: 20px 10px;
@@ -26,8 +28,179 @@ nav a{
     text-decoration: none;
     padding: 10px;
     display: block;
+} */
+
+.navbar{
+    background-color: white;
+    color:#24a0ed;
+    padding: 20px 0;
+}
+    
+
+   .navbar .navbar-brand{
+
+        color:#3a91ac;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+.navbar .navbar-nav .navlink{
+        
+            font-weight: 400;
+            color:#b3b3b3;
+            font-size: 16px;
+            
+    }
+    .navbar .navbar-nav .navlink:hover{
+        color: #0e1306;
+    }
+    .navbar .navbar-nav .navlink:focus{
+        font-weight: 600;
+    }
+   #profile{
+       display: flex;
+       justify-content: flex-end;
+       
+   }
+  
+
+    
+/*sidebar dash css*/
+
+.sidebar{
+
+    padding: 0;
+    
+    background-color: #ffffff;
+   
+}
+.sidebar h6{
+    text-align: center;
+}
+   
+
+
+/* .sidebar .sidebar-sticky{
+    position: sticky;
+    top:  75px;
+    height: calc(100vh - 75px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+} */
+
+.sidebar a.active{
+        color:#0e1306;
+        font-weight: bold;
+    }
+     
+.sidebar .single{
+color: #b3b3b3;
+font-weight: 500;
+font-size: 14px;
+margin: 20px 0;
+text-decoration: none;
+}
+.sidebar .single:hover{
+    color:#003366;
+    
 }
 
+/* right container index*/
+.right-content{
+    background-color: rgba(160, 207, 238, 0.781);
+    border-top-left-radius: 50px; 
+    color: #26758d;
+    height: 900px;
+    padding: 0;
+
+}
+
+.right-content .welcome-container{
+        
+        background-color: rgb(253, 253, 253);
+        background-image: url('../assets/Group\ 2.png');
+        background-size: 100%;
+        background-repeat: no-repeat;;
+        border-radius: 25px;
+}
+
+.right-content .welcome-container .welcome-icons{
+            
+          
+            margin: 5% auto;
+}
+
+            
+
+right-content .welcome-container .welcome-icons .icons{
+                
+                background-color: blue;
+                
+                border-radius: 25px;
+                
+
+            }
+
+
+/*Notification*/
+.notification{
+    height: 750px;
+}
+
+.notification h4{
+        color: rgb(20, 18, 5);
+        
+}
+.notification hr{
+    background-color:#FF003D;
+    height: 0.2rem;
+    
+}
+.notification .media{
+    background-color: white;
+    padding: 1rem;
+    border-radius: 15px;
+}
+.notification .media a{
+        text-decoration: none;
+        color: #26758d;
+    }
+        
+
+
+.reminder{
+        background-color: white;
+        padding: 1rem;
+        border-radius: 15px;
+}
+.reminder a{
+            text-decoration: none;
+            color: black;
+        }
+
+.reminder .reminder-body{
+    background-color: #f4af1b;
+    padding: 1rem;
+    border-radius: 15px;
+}
+    
+        
+
+
+
+/* fontawesome icons*/
+.icon{
+    margin-right: 8px;
+
+}
+
+.sidebar-heading {
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+/*login*/
 .login-form{
     padding: 10%;
     margin : 10% auto;
@@ -107,9 +280,8 @@ nav a{
 
 
 #mario-chat{   
-    border: 1px solid #ddd;
-    box-shadow: 1px 3px 5px rgba(0,0,0,0.05);
-    border-radius: 2px;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
     overflow-y: scroll;
     overflow: hidden;
 }
@@ -130,6 +302,13 @@ nav a{
 } */
 
 #output #me p{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    
+    
+}
+#output #me h6{
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -186,7 +365,7 @@ nav a{
     font-size: 16px;
 }
 
-#mario-chat button{
+#mario-chat .sendmessage{
     background: #575ed8;
     color: #fff;
     font-size: 18px;
@@ -195,4 +374,6 @@ nav a{
     width: 100%;
     border-radius: 0 0 2px 2px;
 }
+
+
 

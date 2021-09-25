@@ -65,16 +65,69 @@ const saveMessage = (req, res)=>{
                 }
             },function(err, user){
                 if(err) throw err;
-                else {res.send({statusCode: 200})}
+                
             })
         }
     })
 
+}
+const saveGroupMessage = (req, res, next)=>{
+    const userid = mongoose.Types.ObjectId(req.user.id.trim());
+    const postdata = req.body;
+    const sentToGroup = mongoose.Types.ObjectId(postdata.groupid.trim());
+
+    console.log(userid);
+    console.log(sentToGroup);
+    console.log(postdata.message)
+    console.log(postdata.username)
+
+    User.find({"groups._id" : sentToGroup})
+        .then((user)=>{
+            if(user){
+                User.updateMany(
+                    {"groups._id" : sentToGroup},
+                    {
+                        $push :{
+                            "groups.$.inbox" :{
+                                "message": postdata.message,
+                                "from": userid,
+                                "username": postdata.username,
+                                "sent": new Date().getTime()
+                            }
+                        }
+                    },
+                    function(err, user){
+                        if (err) throw err;
+                        else{
+                            res.send({statusCode:200})
+                        }
+                    })
+            }
+        })
+}
+const getGroupChat = (req, res,next)=>{
+    const groupid = req.params.id;
+    var totalgroup =[];
+    User.findOne({_id: req.user.id })
+        .then((group)=>{
+            
+            group.groups.forEach(result=>{
+                if(result._id == groupid){
+                    res.render('chat', {title: 'Chat', user:req.user ,selectedGroup: result});
+                }
+            })
+           
+        })
+        .catch(err=>{
+            if(err) throw err;
+        })
 }
 
 
 module.exports = {
     getFriendList,
     getChat,
-    saveMessage
+    saveMessage,
+    getGroupChat,
+    saveGroupMessage
 }
