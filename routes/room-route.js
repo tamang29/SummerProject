@@ -13,8 +13,8 @@ router.get('/',authCheck,(req, res)=>{
     res.redirect(`/room/${req.user.id}`)
 })
 
-router.get('/:room',authCheck, (req, res)=>{
-    res.render('room', {roomId : req.params.room, title: 'video', user: req.user})
+router.get('/:subject/:room',authCheck, (req, res)=>{
+    res.render('room', {roomId : req.params.room, title: 'video', user: req.user ,subject:req.params.subject})
 })
 
 module.exports = router;

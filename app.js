@@ -70,7 +70,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //setup connection to database
-mongoose.connect(process.env.DB_URL ,{useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(process.env.DB_LOCAL_URL ,{useNewUrlParser: true, useUnifiedTopology: true})
     .then(()=>{
         console.log('connection successful');
     })
@@ -107,9 +107,10 @@ app.use('/detail', detailRoute);
 
 
 
+
 const httpServer = http.createServer(app);
 
-//const httpsServer = https.createServer(options , app);
+const httpsServer = https.createServer(options , app);
 const io = socket(httpServer);
 let clients = [];
 // let userId ;

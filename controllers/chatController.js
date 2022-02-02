@@ -76,10 +76,8 @@ const saveGroupMessage = (req, res, next)=>{
     const postdata = req.body;
     const sentToGroup = mongoose.Types.ObjectId(postdata.groupid.trim());
 
-    console.log(userid);
-    console.log(sentToGroup);
-    console.log(postdata.message)
-    console.log(postdata.username)
+
+
 
     User.find({"groups._id" : sentToGroup})
         .then((user)=>{
@@ -93,7 +91,34 @@ const saveGroupMessage = (req, res, next)=>{
                                 "from": userid,
                                 "username": postdata.username,
                                 "sent": new Date().getTime()
-                            }
+                            },
+                           
+                        }
+                    },
+                    function(err, user){
+                        if (err) throw err;
+                        
+                    })
+            }
+        })
+        .catch(err=>{
+            if(err) throw err;
+        })
+    
+    if(postdata.reminder){
+        User.find({"groups._id" : sentToGroup})
+        .then((user)=>{
+            if(user){
+                User.updateMany(
+                    {"groups._id" : sentToGroup},
+                    {
+                        $push :{
+                            "groups.$.reminder" :{
+                                "message": postdata.username +" started meeting.",
+                                "from": userid,
+                                "sent": new Date().getTime()
+                            },
+                           
                         }
                     },
                     function(err, user){
@@ -104,6 +129,10 @@ const saveGroupMessage = (req, res, next)=>{
                     })
             }
         })
+        .catch(err=>{
+            if(err) throw err;
+        })
+    }
 }
 const getGroupChat = (req, res,next)=>{
     const groupid = req.params.id;

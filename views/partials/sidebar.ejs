@@ -3,12 +3,12 @@
         <ul class="nav flex-column align-items-center">
             <a class="single active" href="/" >Home</a>
             <a class="single" href="/chat" >Message</a>
-            <a class="single" href="/meeting" >Meeting</a>
+            <a class="single" href="/detail/meetings" >Meeting</a>
             <% if(user.accountType == "admin" || user.accountType == "instructor"){ %> 
                
                 <a class="single" href="/detail/students">Students</a>
                 <% } %> 
-                <% if(user.accountTye == "instructor"){ %>
+                <% if(user.accountType == "admin"){ %>
                     <a class="single" href="/detail/instructors">Instructors</a>
                     <% } %>  
             <a class="single" href="/auth/logout" >Logout</a>

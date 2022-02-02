@@ -41,7 +41,7 @@
                           <% if(user.groups.length > 0){ %> 
                             <% user.groups.forEach(group=>{%>
                                 <div class="d-flex text-muted ">
-                                    <a href="/chat/group/<%= group.id  %>" class="list-group-item list-group-item-action py-3 lh-tight grouptab" aria-current="true" data-id="<%= group._id %> ">
+                                    <a href="/chat/group/<%= group.id %>" class="list-group-item list-group-item-action py-3 lh-tight grouptab" aria-current="true" data-id="<%= group._id %> ">
                                      <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" 
                                      src="" style="height: 32px; width:32px" />
                                      <div class="d-flex w-100 align-items-center justify-content-between">

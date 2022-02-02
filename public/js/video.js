@@ -89,6 +89,7 @@ navigator.mediaDevices.getUserMedia({
             console.log("New user: "+username);
             otherLabel.innerHTML = username;
             userid = userId;
+           
             username = username;
             connectToNewUser(userId,stream,username);
         }
@@ -99,14 +100,11 @@ navigator.mediaDevices.getUserMedia({
 })
 
 //attendance event
-// $('#attendance').on('click', function(e){
-//     socket.emit("attendance event" , ROOM_ID);
-// })
+$('#attendance').on('click', function(e){
+    socket.emit("attendance event" , ROOM_ID);
+})
 
-// socket.on("attendance button", (roomId)=>{
-//     alert('attendance')
-//     console.log('attendance')
-// })
+
 
 socket.on("user-disconnected", (userId , username)=>{
     if(userId != myPeer.id){

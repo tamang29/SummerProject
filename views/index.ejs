@@ -5,27 +5,7 @@
 <body>
     <div class="container">
         <%- include('./partials/nav.ejs') %>
-        <!-- <div class="row">
-            <div>
-            <h2>Home Page</h2>
-            <img src="<%= user.thumbnail%>" alt="Profile Picture"/>
-            <p>This is home page! Welcome <%= user.username %> </p>
-           
-        </div>
-        </div>
 
-        
-        <% if(user.accountType == "instructor"){ %> 
-        <div class="row justify-content-center">
-            <div class="col-4">
-                <button class="btn btn-primary" id="startMeeting">Start Meeting</button>
-            </div>
-           
-
-        </div>
-        <% } %>
-         
-             -->
              <input type="hidden" value='<%= user.id %>' id="userId"/>
              <div class="row">
        <%- include('./partials/sidebar.ejs') %> 
@@ -77,26 +57,50 @@
                                     </li>
                                     <% } %> 
                        
-                </ul>
+                        </ul>
             </div>
             <div class="reminder my-5">
-                <h4>Reminder</h4>
+                <h4>Reminder <span class="badge rounded-pill bg-danger">
+                    <% let remind = 0 %> 
+                    <% user.groups.forEach(group=>{ %>
+                        <% group.reminder.forEach(result=>{ %>
+                            <% if(result.from != user.id){ %> 
+                            <% remind++ %> 
+                            <% } %> 
+                        <%}) %> 
+                    <% }) %>
+                   <%= remind %> 
+                </span></h4>
                 <hr>
                 <ul class="list-unstyled">
-                    <li class="reminder-body">
-                        <a href="abc.html">
-                            <div class="media-body">
-                                <h5 class="mt-0 mb-1">List-based media object</h5>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="reminder-body my-4">
-                        <a href="abc.html">
-                            <div class="media-body">
-                                <h5 class="mt-0 mb-1">List-based media object</h5>
-                            </div>
-                        </a>
-                    </li>
+                    <% if(remind > 0){ %>
+                        <% user.groups.forEach(group=>{ %>
+                            <% group.reminder.forEach(result=>{ %>
+                                <% if(result.from == user.id) { %> 
+                                    <% }else{ %> 
+                                <li class="media my-3">
+                                    <a href="/chat/group/<%= group.id %> ">
+                                    
+                                        <div class="media-body">
+                                            <h5 class="mt-0 mb-1"></h5>
+                                            <%= result.message%>
+                                        </div>
+                                    </a>
+                                </li>
+                            <%}}) %> 
+                        <% }) %>
+                            <% }else{ %>
+                                <li class="media">
+                                    <a href="#">
+                                    
+                                        <div class="media-body">
+                                            <h5 class="mt-0 mb-1">Nothing to show</h5>
+                                            
+                                        </div>
+                                    </a>
+                                </li>
+                                <% } %>  
+               
                 </ul>
             </div>
         </div>

@@ -36,9 +36,24 @@ const userSchema = new Schema({
         {
             "name": {type: String},
             "members":{type:Array},
-            "inbox": {type:Array}
+            "inbox": {type:Array},
+            "reminder": {type:Array}
         }
     ],
+    attendance:[
+        {
+            "roomid": {type:String},
+            "subject":{type:String},
+            "time": {type:Date},
+            "attended":{type:Boolean}
+        }
+            
+        
+    ],
+    
+   
+
+    
     thumbnail : String
 },{ timestamps : true});
 

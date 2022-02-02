@@ -5,7 +5,7 @@ const socket = io();
 $(function(){
     //chat window 
     let chatwin = $("#chat-window");
-    chatwin.scrollTop(chatwin.height());
+    chatwin.scrollTop(chatwin[0].scrollHeight)
     //session username
     const username = $("#username").val();
     //message sent from other
@@ -36,12 +36,14 @@ $(function(){
         if(data.receiver == sender && userid== data.sender){
 
              you = $(".whole").append('<li id="you"><p class="my-1"><span><strong>'+ data.message +'</strong></span></p></li>');
+             chatwin.scrollTop(chatwin[0].scrollHeight)
              
         }
     })
     socket.on('group message', (data)=>{
         if(data.groupid == groupid && data.sender != sender){
             you = $(".whole").append('<li id="you"><p class="my-1"><span><strong>'+ data.message +'</strong></span><h6><small>'+data.username+'</small></h6></p></li>');
+            chatwin.scrollTop(chatwin[0].scrollHeight)
         }
     })
 
@@ -65,7 +67,7 @@ $(function(){
         
        
         const me = $(".whole").append('<li id="me"><p class="my-1"><span><strong>'+ message +'</strong></span></p></li>');
-        chatwin.scrollTop(chatwin.height());
+        chatwin.scrollTop(chatwin[0].scrollHeight)
         
         $('#message').val('');
 
@@ -87,7 +89,7 @@ $(function(){
             }
             socket.emit('group message', {sender,groupid,username, message});
             const me = $(".whole").append('<li id="me"><p class="my-1"><span><strong>'+ message +'</strong></span><h6><small>'+username+'</small></h6></p></li>');
-            chatwin.scrollTop(chatwin.height());
+            chatwin.scrollTop(chatwin[0].scrollHeight)
             
             $('#message').val('');
 

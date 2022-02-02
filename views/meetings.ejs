@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/header.ejs') %> 
+<body>
+    <div class="container">
+        <%- include('./partials/nav.ejs') %>
+        <input type="hidden" value='<%= user.id %>' id="userId"/>
+        <div class="row">
+        <%- include('./partials/sidebar.ejs') %>
+        
+        <div class="col-md-11">
+            
+            <div class="my-3 p-3 bg-light">
+                <h6 class="border-bottom pb-2 mb-0">Meeting Details</h6>
+                
+                   
+            </div>
+            <div class="d-flex justify-content-end my-2">
+                <% if(user.accountType == 'admin'){ %> 
+                <button class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#addMeeting">Add Meeting</button>
+                <% } %> 
+                  
+                  <!-- Modal -->
+                  <div class="modal fade" id="addMeeting" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Add Meeting</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                         <form id="meeting">
+                                <div class="form-group text-danger message">
+                                    <div class="alert alert-dismissible fade show" id="messages" role="alert" hidden>
+                                        
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Subject">Subject:</label>
+                                    <select class="form-select" aria-label="Default select example" id="subject" name="subject" required>
+                                        <option value="default">options</option>  
+                                        <% if(allusers){ %> 
+                                            <% user.groups.forEach(group=>{ %>
+                                                
+                                                    <option value="<%= group.name %>"><%= group.name %> </option>
+                                                
+                                            <%}) %> 
+                                            <% } %> 
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Intructor">Intructor:</label>
+                                    
+                                    <select class="form-select" aria-label="Default select example" id="instructor" name="instructor" required>
+                                        <option value="default">options</option>  
+                                        <% if(allusers){ %> 
+                                            <% allusers.forEach(user=>{ %>
+                                                <% if(user.accountType == "instructor"){ %> 
+                                                    <option value="<%= user.firstname %> <%= user.lastname  %>"><%= user.firstname  %> <%= user.lastname  %> </option>
+                                                    <input type="text" id="instructorid" name="instructorid" value="<%= user._id %>" hidden>
+                                                <% } %> 
+                                            <%}) %> 
+                                            <% } %> 
+                                    </select>
+                                </div>
+                                <div class="row">
+                                <div class="form-group col">
+                                    <label for="stattime">Starting Time:</label>
+                                    <input class="form-control" type="number" name="starttime" id="starttime" required  min="1" max="12"/>
+                                    
+                                </div>
+                                <div class="form-group col">
+                                    <label for="time"></label>
+                                    <select class="form-select" aria-label="Default select example" id="startT" name="startT" required>        
+                                        <option value="default">options</option>                             
+                                        <option value="am">am</option>
+                                        <option value="pm">pm</option>
+                                      </select>
+                                </div>
+                                
+                                <div class="form-group col">
+                                    <label for="endtime">Ending Time:</label>
+                                    <input class="form-control" type="number" name="endtime" id="endT" required min="1" max="12" />
+                                </div>
+                                <div class="form-group col">
+                                    <label for="time"></label>
+                                    <select class="form-select" aria-label="Default select example" id="endT" name="endT" required>  
+                                        <option value="default">options</option>                                           
+                                        <option value="am">am</option>
+                                        <option value="pm">pm</option>
+                                      </select>
+                                </div>
+                        </div>
+                         
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary" id="entrymeet">Submit</button>
+                        </div>
+                    </form>
+                      </div>
+                    </div>
+                  </div>
+
+            </div>
+            <div class="meeting-table">
+                <% if(meetings){ %> 
+                    <table class="table table-dark table-striped">
+                        <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Subject</th>
+                              <th scope="col">Instructor</th>
+                              <th scope="col">Starting Time</th>
+                              <th scope="col">Ending Time</th>
+                              <% if(user.accountType == "admin" || user.accountType == "instructor"){ %> 
+                              <th scope="col">Action</th>
+                              <% } %> 
+                            </tr>
+                          </thead>
+                          <tbody>
+                              <% let count = 1 %> 
+                              <% meetings.forEach(result=>{ %>
+                                <tr>
+                                <th scope="row"><%= count  %> </th>
+                                <td><%= result.subject  %> </td>
+                                <td><%= result.instructor %></td>
+                                <td><%= result.starttime %><%= result.startT %> </td>
+                                <td><%= result.endtime %><%= result.endT %> </td>
+                                <% if(user.accountType == "admin"){ %> 
+                                <td><button class="btn btn-primary" id="edit" data-id="<%= result.id%>"  >Edit</button><button class="btn btn-danger mx-2" id="delete" data-id="<%= result.id%>">Delete</button></td>
+                                <% } %> 
+                                <% if(user.accountType == 'instructor'){ %> 
+                                    <% if(result.instructor == `${user.firstname} ${user.lastname}`){ %> 
+                                        <% user.groups.forEach(group=>{ %>
+                                            <% if(group.name == result.subject){ %> 
+                                            <td>
+                                                <div class="col-4 meeting">
+                                                <input type="hidden" value='<%= group._id %>' id="groupid"/>
+                                                <input type="hidden" value='<%= group.name %>' id="groupname"/>
+                                                <button type="button" class="btn btn-primary" id="startMeeting" data-meeting="<%= group._id %> ">Start Meeting <%= group.name %> </button>
+                                                </div>
+                                            </td>
+                                                <% } %> 
+                                        <%}) %> 
+                                        
+                                    
+                                <% } %> 
+                                 <% } %> 
+                              
+                                </tr>
+                                <% count++ %> 
+                               
+                        <% }) %> 
+                          </tbody>
+                    </table>
+                    <div class="modal fade" id="editMeeting" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                                
+                              <h5 class="modal-title" id="exampleModalLabel">Edit Meeting</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                             <form id="editform">
+                                <input type="text" id="meetingid" name="meetingid" value="" hidden/>
+                                    <div class="form-group text-danger message">
+                                        <div class="alert alert-dismissible fade show" id="messages" role="alert" hidden>
+                                            
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Subject">Subject:</label>
+                                        <select class="form-select" aria-label="Default select example" id="editsubject" name="editsubject" required>
+                                            <option value="default">options</option>  
+                                            <% if(allusers){ %> 
+                                                <% user.groups.forEach(group=>{ %>
+                                                    
+                                                        <option value="<%= group.name %>"><%= group.name %> </option>
+                                                    
+                                                <%}) %> 
+                                                <% } %> 
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Intructor">Intructor:</label>
+                                        
+                                        <select class="form-select" aria-label="Default select example" id="editinstructor" name="editinstructor" required>
+                                            <option value="default">options</option>  
+                                            <% if(allusers){ %> 
+                                                <% allusers.forEach(user=>{ %>
+                                                    <% if(user.accountType == "instructor"){ %> 
+                                                        <option value="<%= user.firstname %> <%= user.lastname %>"><%= user.firstname  %> <%= user.lastname  %> </option>
+                                                    <% } %> 
+                                                <%}) %> 
+                                                <% } %> 
+                                        </select>
+                                    </div>
+                                    <div class="row">
+                                    <div class="form-group col">
+                                        <label for="stattime">Starting Time:</label>
+                                        <input class="form-control" type="number" name="editstarttime" id="editstarttime" required  min="1" max="12"/>
+                                        
+                                    </div>
+                                    <div class="form-group col">
+                                        <label for="time"></label>
+                                        <select class="form-select" aria-label="Default select example" id="editstartT" name="editstartT" required>        
+                                            <option value="default">options</option>                             
+                                            <option value="am">am</option>
+                                            <option value="pm">pm</option>
+                                          </select>
+                                    </div>
+                                    
+                                    <div class="form-group col">
+                                        <label for="endtime">Ending Time:</label>
+                                        <input class="form-control" type="number" name="editendtime" id="editendtime" required min="1" max="12" />
+                                    </div>
+                                    <div class="form-group col">
+                                        <label for="time"></label>
+                                        <select class="form-select" aria-label="Default select example" id="editendT" name="editendT" required>  
+                                            <option value="default">options</option>                                           
+                                            <option value="am">am</option>
+                                            <option value="pm">pm</option>
+                                          </select>
+                                    </div>
+                            </div>
+                             
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary" id="editmeet">Edit</button>
+                            </div>
+                        </form>
+                          </div>
+                        </div>
+                      </div>
+                <% } %> 
+                
+
+
+            </div>
+
+            
+            
+              
+        </div>
+        </div> 
+        </div>
+
+    </div>
+    <%- include('./partials/footer.ejs') %>     
+</body>
+<script>
+    $(document).ready(function(){
+        $(this).on('submit', '#meeting',function(e){
+            e.preventDefault();
+            const formdata = $('form').serialize();
+            
+            //alert(formdata)
+            $.ajax({
+                url: '/detail/meetings/add',
+                type: 'POST',
+                dataType : 'JSON',
+                data:formdata,
+                success:function(data){
+                   if(data.msg){
+                    e.preventDefault();
+                    $("#messages").append(`${data.msg}`).addClass('alert-success');
+                    $("#messages").attr('hidden', false);
+                    $("form").trigger("reset");
+                    $(" .meeting-table").load(" .meeting-table");
+                    
+                       
+                   }else{
+                    $("#messages").append(`${data.error}`).addClass('alert-danger');
+                    $("#messages").attr('hidden', false);
+                   }
+                }
+            })
+        })
+
+        $(this).on('click', "#edit",function(e){
+            
+            const id = $(this).data('id');
+           
+
+            $.ajax({
+                url: '/detail/meetings/getsingle',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {id:id},
+                success:function(data){
+                    if(data.meetdetail){
+                    $("#editMeeting").modal('show');
+                    $("#editsubject").val(data.meetdetail.subject);
+                    $("#editinstructor").val(data.meetdetail.instructor).change();
+                    $("#editstarttime").val(data.meetdetail.starttime);
+                    $("#editstartT").val(data.meetdetail.startT).change();
+                    $("#editendtime").val(data.meetdetail.endtime);
+                    $("#editendT").val(data.meetdetail.endT).change();
+                    $("#meetingid").val(id);
+                    }
+                }
+            })
+        })
+        $(this).on('submit','#editform',function(e){
+            
+            const formdata = $('form#editform').serialize();
+            
+            $.ajax({
+                url: '/detail/meetings/edit',
+                type: 'POST',
+                dataType: 'JSON',
+                data:formdata,
+                success:function(data){
+                    
+                    if(data.msg){
+                    e.preventDefault();
+                    $("#messages").append(`${data.msg}`).addClass('alert-success');
+                    $("#messages").attr('hidden', false);
+                    $("form").trigger("reset");
+                    $(" .meeting-table").load(" .meeting-table");
+                    
+                       
+                   }else{
+                    $("#messages").append(`${data.error}`).addClass('alert-danger');
+                    $("#messages").attr('hidden', false);
+                   }
+                }
+            })
+
+        })
+        $(this).on('click', "#delete",function(e){
+            const id = $(this).data('id');
+            
+            if(confirm("Confirm Delete?") == true){
+                $.ajax({
+                url: '/detail/meetings/delete',
+                type: 'GET',
+                data: {deleteid:id},
+                success:function(data){
+                    $(" .meeting-table").load(" .meeting-table");
+                }
+
+            })
+            }
+            
+           
+        })
+    
+    })
+    const username = "<%= user.username %>"
+</script>
+<script src="/js/meeting.js"></script>
+</html>

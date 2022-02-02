@@ -33,7 +33,11 @@
               <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                 <div class="row w-100">
                     <div class="col">
-                  <strong class="text-gray-dark"><%= result.firstname %><%= result.lastname%> </strong>
+                  <strong class="text-gray-dark"><%= result.firstname %><%= result.lastname%>
+                    <% if(result.accountType == "instructor") {%> 
+                        <span class="badge rounded-pill bg-primary">instructor</span> 
+                        <% } %> 
+                </strong>
                     </div>
                     <div class="col d-flex justify-content-end add">
                         <% if(result.id == user.id){ %> 
